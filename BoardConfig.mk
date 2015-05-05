@@ -15,6 +15,7 @@
 LOCAL_PATH := device/jiayu/s3
 
 USE_CAMERA_STUB := true
+USE_OPENGL_RENDERER := true
 
 # inherit from the proprietary version
 -include vendor/jiayu/s3/BoardConfigVendor.mk
