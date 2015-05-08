@@ -12,6 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * - this is a file created by Carliv from forum.xda-developers.com, by modifying 
+ *  the stock twrp recovery file, in order to support the mt6596 platforms 32 bits
+ *  framebuffer.
  */
 
 #include <stdbool.h>
@@ -36,8 +39,11 @@
 #ifdef BOARD_USE_CUSTOM_RECOVERY_FONT
 #include BOARD_USE_CUSTOM_RECOVERY_FONT
 #else
-#include "font_10x18.h"
+#include "roboto_23x41.h"
 #endif
+
+#define PIXEL_FORMAT GGL_PIXEL_FORMAT_RGBA_8888
+#define PIXEL_SIZE 4
 
 #ifdef RECOVERY_BGRA
 #define PIXEL_FORMAT GGL_PIXEL_FORMAT_BGRA_8888
@@ -185,7 +191,8 @@ static int get_framebuffer(GGLSurface *fb)
 
     fprintf(stderr, "Pixel format: %dx%d @ %dbpp\n", vi.xres, vi.yres, vi.bits_per_pixel);
 
-    vi.bits_per_pixel = PIXEL_SIZE * 8;
+    if (vi.bits_per_pixel != 32)
+        vi.bits_per_pixel = 32;
     if (PIXEL_FORMAT == GGL_PIXEL_FORMAT_BGRA_8888) {
         fprintf(stderr, "Pixel format: BGRA_8888\n");
         if (PIXEL_SIZE != 4)    fprintf(stderr, "E: Pixel Size mismatch!\n");
@@ -197,17 +204,17 @@ static int get_framebuffer(GGLSurface *fb)
         vi.blue.length    = 8;
         vi.transp.offset  = 0;
         vi.transp.length  = 8;
-    } else if (PIXEL_FORMAT == GGL_PIXEL_FORMAT_RGBX_8888) {
-        fprintf(stderr, "Pixel format: RGBX_8888\n");
+    } else if (PIXEL_FORMAT == GGL_PIXEL_FORMAT_RGBA_8888) {
+        fprintf(stderr, "Pixel format: RGBA_8888\n");
         if (PIXEL_SIZE != 4)    fprintf(stderr, "E: Pixel Size mismatch!\n");
-        vi.red.offset     = 24;
-        vi.red.length     = 8;
-        vi.green.offset   = 16;
-        vi.green.length   = 8;
-        vi.blue.offset    = 8;
-        vi.blue.length    = 8;
-        vi.transp.offset  = 0;
+        vi.transp.offset  = 24;
         vi.transp.length  = 8;
+        vi.red.offset     = 0;
+        vi.red.length     = 8;
+        vi.green.offset   = 8;
+        vi.green.length   = 8;
+        vi.blue.offset    = 16;
+        vi.blue.length    = 8;
     } else if (PIXEL_FORMAT == GGL_PIXEL_FORMAT_RGB_565) {
 #ifdef RECOVERY_RGB_565
 		fprintf(stderr, "Pixel format: RGB_565\n");
@@ -926,3 +933,4 @@ int gr_free_surface(gr_surface surface)
 void gr_write_frame_to_file(int fd)
 {
     write(fd, gr_mem_surface.data, vi.xres * vi.yres * vi.bits_per_pixel / 8);
+}
