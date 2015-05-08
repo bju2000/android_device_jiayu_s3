@@ -17,7 +17,7 @@ $(call inherit-product, device/jiayu/s3/device_s3.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 PRODUCT_DEVICE := s3
-PRODUCT_NAME := omni_s3
+PRODUCT_NAME := slim_s3
 PRODUCT_BRAND := JIAYU
 PRODUCT_MODEL := s3
 PRODUCT_MANUFACTURER := JYT
