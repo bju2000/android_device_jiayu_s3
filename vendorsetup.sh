@@ -21,4 +21,4 @@
 # function: add_lunch_combo generic-eng
 
 add_lunch_combo full_s3-userdebug
-add_lunch_combo omni_s3-userdebug
+add_lunch_combo slim_s3-userdebug
